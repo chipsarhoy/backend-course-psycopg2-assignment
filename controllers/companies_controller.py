@@ -34,7 +34,12 @@ def create_company():
 
     final_result = cursor.fetchone()
 
-    return jsonify({"message": "company created", "result": final_result}), 201
+    record = {
+        "company_id": final_result[0],
+        "company_name": final_result[1],
+    }
+
+    return jsonify({"message": "company created", "result": record}), 201
 
 def get_all_companies():
     results = cursor.execute("""
@@ -65,7 +70,12 @@ def get_company_by_id(company_id):
     if not result:
         return jsonify({"message": "company does not exist"}), 404
 
-    return jsonify({"message": "company found", "result": result}), 200
+    record = {
+        "company_id": result[0],
+        "company_name": result[1],
+    }
+
+    return jsonify({"message": "company found", "result": record}), 200
 
 def update_company_by_id(company_id):
     update_data = request.form if request.form else request.json
@@ -112,7 +122,12 @@ def update_company_by_id(company_id):
 
     final_result = cursor.fetchone()
 
-    return jsonify({"message": "company updated", "result": final_result}), 200
+    record = {
+        "company_id": final_result[0],
+        "company_name": final_result[1],
+    }
+
+    return jsonify({"message": "company updated", "result": record}), 200
 
 def delete_company_by_id(company_id):
     result = cursor.execute("""

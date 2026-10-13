@@ -29,7 +29,13 @@ def create_warranty():
 
     result = cursor.fetchone()
 
-    return jsonify({"message": "warranty created", "result": result}), 201
+    record = {
+        "warranty_id": result[0],
+        "product_id": result[1],
+        "warranty_months": result[2]
+    }
+
+    return jsonify({"message": "warranty created", "result": record}), 201
 
 def get_warranty_by_id(warranty_id):
     result = cursor.execute("""
@@ -42,7 +48,13 @@ def get_warranty_by_id(warranty_id):
     if not result:
         return jsonify({"message": "warranty does not exist"}), 404
 
-    return jsonify({"message": "warranty found", "result": result}), 200
+    record = {
+        "warranty_id": result[0],
+        "product_id": result[1],
+        "warranty_months": result[2]
+    }
+
+    return jsonify({"message": "warranty found", "result": record}), 200
 
 def update_warranty_by_id(warranty_id):
     update_data = request.form if request.form else request.json
@@ -88,7 +100,13 @@ def update_warranty_by_id(warranty_id):
 
     final_result = cursor.fetchone()
 
-    return jsonify({"message": "warranty updated", "result": final_result}), 200
+    record = {
+        "warranty_id": final_result[0],
+        "product_id": final_result[1],
+        "warranty_months": final_result[2]
+    }
+
+    return jsonify({"message": "warranty updated", "result": record}), 200
 
 def delete_warranty_by_id(warranty_id):
     check = cursor.execute("""

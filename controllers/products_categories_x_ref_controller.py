@@ -46,4 +46,9 @@ def create_x_ref():
     if not verify:
         return jsonify({"message": "unable to create the relationship"}), 400
 
-    return jsonify({"message": "relationship created", "result": verify}), 201
+    record = {
+        "product_id": verify[0],
+        "category_id": verify[1]
+    }
+
+    return jsonify({"message": "relationship created", "result": record}), 201

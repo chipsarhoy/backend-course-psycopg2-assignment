@@ -32,14 +32,23 @@ def create_product():
     conn.commit()
 
     final_result = cursor.execute("""
-            SELECT * FROM Products
-            WHERE product_name = %s;
-            """, (product_name,)
-        )
+        SELECT * FROM Products
+        WHERE product_name = %s;
+        """, (product_name,)
+    )
 
     final_result = cursor.fetchone()
+
+    result_dict = {
+        "product_id": final_result[0],
+        "company_id": final_result[1],
+        "product_name": final_result[2],
+        "description": final_result[3],
+        "price": final_result[4],
+        "active": final_result[5]
+    }
     
-    return jsonify({"message": "product created", "result": final_result}), 201
+    return jsonify({"message": "product created", "result": result_dict}), 201
 
 
 def get_all_products():
@@ -81,7 +90,20 @@ def get_active_products():
     if not results:
         return jsonify({"message": "no active products"}), 404
 
-    return jsonify({"message": "found active products", "results": results}), 200
+    records_list = []
+
+    for result in results:
+        result = {
+            "product_id": result[0],
+            "company_id": result[1],
+            "product_name": result[2],
+            "description": result[3],
+            "price": result[4],
+            "active": result[5]
+        }
+        records_list.append(result)
+
+    return jsonify({"message": "found active products", "results": records_list}), 200
 
 
 def get_product_by_id(product_id):
@@ -95,7 +117,16 @@ def get_product_by_id(product_id):
     if not result:
         return jsonify({"message": "product does not exist"}), 404
 
-    return jsonify({"message": "product found", "result": result}), 200
+    result_dict = {
+        "product_id": result[0],
+        "company_id": result[1],
+        "product_name": result[2],
+        "description": result[3],
+        "price": result[4],
+        "active": result[5]
+    }
+
+    return jsonify({"message": "product found", "result": result_dict}), 200
 
 def get_products_by_company(company_id):
     products_from_company = cursor.execute("""
@@ -177,7 +208,16 @@ def update_product_by_id(product_id):
 
     final_result = cursor.fetchone()
 
-    return jsonify({"message": "product updated", "result": final_result}), 200
+    final_result_dict = {
+        "product_id": final_result[0],
+        "company_id": final_result[1],
+        "product_name": final_result[2],
+        "description": final_result[3],
+        "price": final_result[4],
+        "active": final_result[5]
+    }
+
+    return jsonify({"message": "product updated", "result": final_result_dict}), 200
 
 
 def delete_product_by_id(product_id):

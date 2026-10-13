@@ -34,7 +34,12 @@ def create_category():
 
     final_result = cursor.fetchone()
 
-    return jsonify({"message": "category created", "result": final_result}), 201
+    result_dict = {
+        'category_id': final_result[0],
+        'category_name': final_result[1]
+    }
+
+    return jsonify({"message": "category created", "result": result_dict}), 201
 
 def get_all_categories():
     result = cursor.execute("""
@@ -65,8 +70,13 @@ def get_category_by_id(category_id):
 
     if not result:
         return jsonify({"message": "category does not exist"}), 404
+  
+    record = {
+        'category_id': result[0],
+        'category_name': result[1]
+    }
 
-    return jsonify({"message": "category found", "result": result}), 200
+    return jsonify({"message": "category found", "result": record}), 200
 
 def update_category_by_id(category_id):
     update_data = request.form if request.form else request.json
@@ -109,7 +119,12 @@ def update_category_by_id(category_id):
 
     final_result = cursor.fetchone()
 
-    return jsonify({"message": "category updated", "result": final_result}), 200
+    record = {
+        'category_id': final_result[0],
+        'category_name': final_result[1]
+    }
+
+    return jsonify({"message": "category updated", "result": record}), 200
 
 def delete_category_by_id(category_id):
     result = cursor.execute("""
